@@ -35,4 +35,8 @@ describe("class: NotesModel", () => {
       expect(this.notesModel.getNotes()).toEqual([])
     });
   });
+  it("setNotes", () => {
+    this.notesModel.setNotes(['note 1', 'note 2'])
+    expect(this.notesModel.getNotes()).toEqual(["note 1", "note 2"]);
+  })
 });

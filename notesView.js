@@ -1,7 +1,8 @@
 class NotesView {
-  constructor(model) {
+  constructor(model, client) {
     this.mainContainerEl = document.querySelector("#main-container");
     this.model = model;
+    this.client = client;
 
     console.log(this.mainContainerEl);
 
@@ -10,7 +11,7 @@ class NotesView {
     this.addNoteButtonEl.addEventListener("click", () => {
       this.model.addNote(document.querySelector("#note-input").value);
       this.displayNotes();
-      document.querySelector("#note-input").value = ""
+      document.querySelector("#note-input").value = "";
     });
   }
 
@@ -22,11 +23,19 @@ class NotesView {
     });
 
     const notes = this.model.getNotes();
-    notes.forEach((note) => {
+    
+    notes.forEach(note => {
       const newDiv = document.createElement("div");
       newDiv.textContent = note;
       newDiv.className = "note";
       this.mainContainerEl.append(newDiv);
+    });
+  }
+
+  displayNotesFromApi() {
+    this.client.loadNotes(notes => {
+      this.model.setNotes(notes);
+      this.displayNotes();
     });
   }
 }

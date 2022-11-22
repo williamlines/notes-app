@@ -3,8 +3,10 @@
  */
 
 const fs = require("fs");
+require("jest-fetch-mock").enableMocks();
 const NotesView = require("./notesView");
 const NotesModel = require("./notesModel");
+const NotesClient = require("./notesClient");
 
 describe("notesView", () => {
   beforeEach(() => {
@@ -66,5 +68,27 @@ describe("notesView", () => {
     button.click();
 
     expect(document.querySelector("#note-input").value).toEqual("");
+  });
+
+  // TODO !!!!!!
+  xit("display notes from API works", () => {
+    const model = new NotesModel();
+
+    const client = {
+      loadNotes: () => "note",
+    };
+
+    fetch.mockResponseOnce(
+      JSON.stringify({
+        note: "test note",
+      })
+    );
+
+    const view = new NotesView(model, client);
+
+    view.displayNotesFromApi();
+
+    expect(document.querySelectorAll("div.note").length).toBe(1);
+    done();
   });
 });

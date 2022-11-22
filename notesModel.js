@@ -4,16 +4,20 @@ class NotesModel {
   }
 
   getNotes() {
-    return this.notes
+    return this.notes;
   }
 
   addNote(note) {
-    this.notes.push(note)
+    this.notes.push(note);
   }
 
   reset() {
-    this.notes = []
+    this.notes = [];
+  }
+
+  setNotes(notes) {
+    this.notes = notes;
   }
 }
 
-module.exports = NotesModel
+module.exports = NotesModel;
