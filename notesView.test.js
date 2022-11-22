@@ -38,4 +38,33 @@ describe("notesView", () => {
       "remind me to run bundler"
     );
   });
+
+  it("clears old notes before displaying all notes", () => {
+    const model = new NotesModel();
+    const view = new NotesView(model);
+
+    model.addNote("test note 1");
+    model.addNote("test note 2");
+
+    view.displayNotes();
+
+    expect(document.querySelectorAll("div.note").length).toBe(2);
+
+    view.displayNotes();
+
+    expect(document.querySelectorAll("div.note").length).toBe(2);
+  });
+
+  it("clears the input after a user presses the 'Add note' button", () => {
+    const model = new NotesModel();
+    const view = new NotesView(model);
+
+    const input = document.querySelector("#note-input");
+    input.value = "remind me to run bundler";
+
+    const button = document.querySelector("#add-note-button");
+    button.click();
+
+    expect(document.querySelector("#note-input").value).toEqual("");
+  });
 });
