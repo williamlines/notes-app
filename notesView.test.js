@@ -4,33 +4,38 @@
 
 const fs = require("fs");
 const NotesView = require("./notesView");
-const NotesModel = require('./notesModel')
+const NotesModel = require("./notesModel");
 
 describe("notesView", () => {
-  // We can use the beforeEach() hook
-  // to set the jest `document` HTML before each test
   beforeEach(() => {
     document.body.innerHTML = fs.readFileSync("./index.html");
   });
 
   it("displayNotes creates notes on the webpage", () => {
-    // 1. Arrange - instantiate our View class
-    const model = new NotesModel;
-    
-    // 2. Act - call any method that modifies the page
-    // this method `displayTitle` would dynamically
-    // set a <h1> title on the page with the given content
-    model.addNote('test note 1')
-    model.addNote('test note 2')
-    
-    const view = new NotesView(model);
-    
-    view.displayNotes()
+    const model = new NotesModel();
 
-    // 3. Assert - we assert the page contains what it should.
-    // Usually, you will use `.querySelector` (and friends)
-    // here, and assert the text content, the number of elements,
-    // or other things that make sense for your test.
+    model.addNote("test note 1");
+    model.addNote("test note 2");
+
+    const view = new NotesView(model);
+
+    view.displayNotes();
+
     expect(document.querySelectorAll("div.note").length).toBe(2);
+  });
+
+  it("can add a note on the website using the 'Add note' button", () => {
+    const model = new NotesModel();
+    const view = new NotesView(model);
+
+    const input = document.querySelector("#note-input");
+    input.value = "remind me to run bundler";
+
+    const button = document.querySelector("#add-note-button");
+    button.click();
+
+    expect(document.querySelector("div.note").textContent).toEqual(
+      "remind me to run bundler"
+    );
   });
 });
