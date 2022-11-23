@@ -9,11 +9,9 @@ const NotesModel = require("./notesModel");
 const NotesClient = require("./notesClient");
 
 describe("notesView", () => {
-  beforeEach(() => {
-    document.body.innerHTML = fs.readFileSync("./index.html");
-  });
 
   it("displayNotes creates notes on the webpage", () => {
+    document.body.innerHTML = fs.readFileSync("./index.html");
     const model = new NotesModel();
 
     model.addNote("test note 1");
@@ -27,8 +25,10 @@ describe("notesView", () => {
   });
 
   it("can add a note on the website using the 'Add note' button", () => {
+    document.body.innerHTML = fs.readFileSync("./index.html");
     const model = new NotesModel();
-    const view = new NotesView(model);
+    const client = new NotesClient();
+    const view = new NotesView(model, client);
 
     const input = document.querySelector("#note-input");
     input.value = "remind me to run bundler";
@@ -43,7 +43,8 @@ describe("notesView", () => {
 
   it("clears old notes before displaying all notes", () => {
     const model = new NotesModel();
-    const view = new NotesView(model);
+    const client = new NotesClient()
+    const view = new NotesView(model, client);
 
     model.addNote("test note 1");
     model.addNote("test note 2");
@@ -58,8 +59,10 @@ describe("notesView", () => {
   });
 
   it("clears the input after a user presses the 'Add note' button", () => {
+    document.body.innerHTML = fs.readFileSync("./index.html");
     const model = new NotesModel();
-    const view = new NotesView(model);
+    const client = new NotesClient()
+    const view = new NotesView(model, client);
 
     const input = document.querySelector("#note-input");
     input.value = "remind me to run bundler";
@@ -71,24 +74,23 @@ describe("notesView", () => {
   });
 
   // TODO !!!!!!
-  xit("display notes from API works", () => {
+  it("display notes from API works", () => {
     const model = new NotesModel();
 
-    const client = {
+    const clientMock = {
       loadNotes: () => "note",
     };
 
     fetch.mockResponseOnce(
       JSON.stringify({
-        note: "test note",
+        content: "test note",
       })
     );
 
-    const view = new NotesView(model, client);
+    const view = new NotesView(model, clientMock);
 
     view.displayNotesFromApi();
 
-    expect(document.querySelectorAll("div.note").length).toBe(1);
-    done();
+    expect(document.querySelectorAll("div.note").length).toBe(1)
   });
 });
