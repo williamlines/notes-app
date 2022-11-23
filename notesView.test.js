@@ -107,4 +107,8 @@ describe("notesView", () => {
 
     expect(document.querySelector("div.note").textContent).toBe("this is a test note");
   });
+
+  it('createNote method', () => {
+    
+  })
 });
