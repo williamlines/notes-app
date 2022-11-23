@@ -9,7 +9,6 @@ const NotesModel = require("./notesModel");
 const NotesClient = require("./notesClient");
 
 describe("notesView", () => {
-
   it("displayNotes creates notes on the webpage", () => {
     document.body.innerHTML = fs.readFileSync("./index.html");
     const model = new NotesModel();
@@ -43,7 +42,7 @@ describe("notesView", () => {
 
   it("clears old notes before displaying all notes", () => {
     const model = new NotesModel();
-    const client = new NotesClient()
+    const client = new NotesClient();
     const view = new NotesView(model, client);
 
     model.addNote("test note 1");
@@ -61,7 +60,7 @@ describe("notesView", () => {
   it("clears the input after a user presses the 'Add note' button", () => {
     document.body.innerHTML = fs.readFileSync("./index.html");
     const model = new NotesModel();
-    const client = new NotesClient()
+    const client = new NotesClient();
     const view = new NotesView(model, client);
 
     const input = document.querySelector("#note-input");
@@ -75,22 +74,37 @@ describe("notesView", () => {
 
   // TODO !!!!!!
   it("display notes from API works", () => {
+    document.body.innerHTML = fs.readFileSync("./index.html");
     const model = new NotesModel();
 
+    // change this
     const clientMock = {
-      loadNotes: () => "note",
+      loadNotes: (callback) => {
+        callback(["this is a test note"]);
+      },
     };
-
-    fetch.mockResponseOnce(
-      JSON.stringify({
-        content: "test note",
-      })
-    );
 
     const view = new NotesView(model, clientMock);
 
     view.displayNotesFromApi();
 
-    expect(document.querySelectorAll("div.note").length).toBe(1)
+    expect(document.querySelectorAll("div.note").length).toBe(1);
+  });
+
+  it("display notes from API works", () => {
+    document.body.innerHTML = fs.readFileSync("./index.html");
+    const model = new NotesModel();
+
+    const clientMock = {
+      loadNotes: (callback) => {
+        callback(["this is a test note"]);
+      },
+    };
+
+    const view = new NotesView(model, clientMock);
+
+    view.displayNotesFromApi();
+
+    expect(document.querySelector("div.note").textContent).toBe("this is a test note");
   });
 });
