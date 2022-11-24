@@ -56,6 +56,36 @@ class NotesView {
     const error = document.querySelector("#error_msg");
     error.textContent = "Oops something went wrong...";
   }
+
+  async emojify2(string) {
+    return string;
+  }
+
+  async emojify(string) {
+    const url = "https://makers-emojify.herokuapp.com/";
+    const config = {
+      method: "POST",
+      // mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: "this is fire :fire:" }),
+    };
+
+
+    try {
+      console.log(fetch);
+      const fetchResponse = await fetch(url, config);
+      console.log(fetchResponse);
+      const ret = await fetchResponse.json();
+      return ret.emojified_text;
+      console.log(ret);
+      return ret;
+    } catch (error) {
+      console.error(error);
+      return error;
+    }
+  }
 }
 
 module.exports = NotesView;

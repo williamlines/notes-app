@@ -3,10 +3,11 @@
  */
 
 const fs = require("fs");
-require("jest-fetch-mock").enableMocks();
+require("jest-fetch-mock") //.enableMocks();
 const NotesView = require("./notesView");
 const NotesModel = require("./notesModel");
 const NotesClient = require("./notesClient");
+const { notEqual } = require("assert");
 
 describe("notesView", () => {
   it("displayNotes creates notes on the webpage", () => {
@@ -108,7 +109,15 @@ describe("notesView", () => {
     expect(document.querySelector("div.note").textContent).toBe("this is a test note");
   });
 
-  it('createNote method', () => {
-    
+  it("emojify method can covert a string into emojified version", async () => {
+    const model = new NotesModel()
+    const client = new NotesClient()
+    const view = new NotesView(model, client)
+
+    const string = 'this is fire :fire:'
+
+    expect.assertions(1);
+    const data = await view.emojify(string)
+    expect(data).toBe("this is fire 🔥");
   })
 });
